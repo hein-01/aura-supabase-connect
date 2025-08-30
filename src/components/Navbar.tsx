@@ -20,26 +20,22 @@ export const Navbar = () => {
     <nav className="bg-background border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Left Side - Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <Building2 className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold text-foreground">wellfinds</span>
-          </Link>
-          
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              to="/"
-              className="text-muted-foreground hover:text-foreground font-medium"
-            >
-              🏠 Home
+          {/* Left Side - Logo and Find Shops */}
+          <div className="flex items-center space-x-6">
+            <Link to="/" className="flex items-center space-x-2">
+              <Building2 className="h-6 w-6 text-primary" />
+              <span className="text-xl font-bold text-foreground">wellfinds</span>
             </Link>
-            <Link
-              to="/find-shops"
-              className="text-muted-foreground hover:text-foreground font-medium"
-            >
-              🏪 Find Shops
-            </Link>
+            
+            {/* Find Shops next to logo */}
+            <div className="hidden md:flex">
+              <Link
+                to="/find-shops"
+                className="text-muted-foreground hover:text-foreground font-medium"
+              >
+                🏪 Find Shops
+              </Link>
+            </div>
           </div>
 
           {/* Desktop Right Side Actions */}
@@ -146,13 +142,6 @@ export const Navbar = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[280px]">
                 <div className="flex flex-col space-y-4 mt-8">
-                  <Link
-                    to="/"
-                    className="text-lg font-medium text-foreground hover:text-primary"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    🏠 Home
-                  </Link>
                   <Link
                     to="/find-shops"
                     className="text-lg font-medium text-foreground hover:text-primary"
