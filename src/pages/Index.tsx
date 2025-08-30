@@ -114,7 +114,7 @@ const Index = () => {
             />
             
             <Button className="bg-transparent hover:bg-transparent text-muted-foreground px-3 py-2 rounded-md flex items-center justify-center">
-              <Search className="h-8 w-8" />
+              <Search className="h-10 w-10" strokeWidth={3} />
             </Button>
           </div>
         </div>
