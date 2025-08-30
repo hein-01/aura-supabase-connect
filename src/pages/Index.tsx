@@ -94,7 +94,7 @@ const Index = () => {
                   <SwiperSlide key={category.value} className="h-10 flex items-center">
                      <button
                        onClick={() => setSelectedCategory(category.value)}
-                       className={`w-full h-full text-black font-medium text-xs sm:text-sm flex items-center justify-center px-4 py-3 ${
+                       className={`w-full h-full text-black font-medium text-xs sm:text-sm flex items-center justify-center px-4 ${
                          selectedCategory === category.value ? 'bg-yellow-500' : 'bg-yellow-400'
                        }`}
                      >
