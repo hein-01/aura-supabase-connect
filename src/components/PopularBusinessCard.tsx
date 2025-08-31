@@ -153,6 +153,9 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
           )}
         </Swiper>
         
+        {/* Light green section at bottom of product images */}
+        <div className="absolute bottom-0 left-0 right-0 h-[20px] bg-green-200 z-20"></div>
+        
         <Button
           variant="ghost"
           size="sm"
