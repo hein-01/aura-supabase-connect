@@ -153,6 +153,13 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
           )}
         </Swiper>
         
+        {/* Purple pricing tag in top left corner */}
+        <div className="absolute top-2 left-2 z-30 bg-purple-600 text-white px-2 py-1 rounded text-xs font-medium">
+          {business.starting_price ? (
+            <span>From {business.starting_price}</span>
+          ) : 'Price on request'}
+        </div>
+        
         {/* Light green section at bottom of product images */}
         <div className="absolute bottom-0 left-0 right-0 h-[20px] bg-green-200 z-20"></div>
         
@@ -168,13 +175,6 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
       <CardContent className="flex-1 p-3 flex flex-col justify-between">
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              {business.starting_price ? (
-                <span>
-                  <span className="text-primary">From</span> {business.starting_price}
-                </span>
-              ) : 'Price on request'}
-            </div>
           </div>
           
           <div className="flex items-center gap-2">
