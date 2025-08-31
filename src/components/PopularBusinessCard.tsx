@@ -217,36 +217,6 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
         </div>
         
         <div className="space-y-2 mt-2">
-          <Dialog open={openModal} onOpenChange={setOpenModal}>
-            <DialogTrigger asChild>
-              <Button 
-                variant="outline" 
-                className="w-full h-8 text-xs bg-[#F5F8FA] hover:bg-[#E8EEF2] border-border"
-              >
-                See Products Catalog
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{business.name} - Products Catalog</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-3">
-                {parseProductsCatalog(business.products_catalog).length > 0 ? (
-                  parseProductsCatalog(business.products_catalog).map((product: string, index: number) => (
-                    <div key={index} className="flex items-center space-x-2 p-3 bg-muted/50 rounded-lg">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-sm">{product}</span>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <p>No products catalog available</p>
-                  </div>
-                )}
-              </div>
-            </DialogContent>
-          </Dialog>
-          
           <Button 
             className="w-full h-8 text-xs flex items-center justify-center gap-1"
             onClick={() => business.website && window.open(business.website, '_blank')}
@@ -257,32 +227,64 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
          </div>
        </CardContent>
        
-       {/* Light gray bottom section with social icons */}
-       <div className="h-[50px] bg-muted rounded-b-lg border-t border-border flex items-center justify-end px-3 gap-2">
-         {business.facebook_page && (
-           <div 
-             className="w-7 h-7 rounded-full border border-border shadow-md flex items-center justify-center bg-background hover:shadow-lg transition-shadow cursor-pointer"
-             onClick={() => window.open(business.facebook_page, '_blank')}
-           >
-             <Facebook className="w-3 h-3 text-blue-600" />
-           </div>
-         )}
-         {business.tiktok_url && (
-           <div 
-             className="w-7 h-7 rounded-full border border-border shadow-md flex items-center justify-center bg-background hover:shadow-lg transition-shadow cursor-pointer"
-             onClick={() => window.open(business.tiktok_url, '_blank')}
-           >
-             <Instagram className="w-3 h-3 text-pink-600" />
-           </div>
-         )}
-         {business.phone && (
-           <div 
-             className="w-7 h-7 rounded-full border border-border shadow-md flex items-center justify-center bg-background hover:shadow-lg transition-shadow cursor-pointer"
-             onClick={() => window.open(`https://wa.me/${business.phone.replace(/[^\d]/g, '')}`, '_blank')}
-           >
-             <MessageCircle className="w-3 h-3 text-green-600" />
-           </div>
-         )}
+       {/* Light gray bottom section with button and social icons */}
+       <div className="h-[50px] bg-muted rounded-b-lg border-t border-border flex items-center justify-between px-3">
+         <Dialog open={openModal} onOpenChange={setOpenModal}>
+           <DialogTrigger asChild>
+             <Button 
+               variant="outline" 
+               className="h-7 text-xs px-3 bg-[#F5F8FA] hover:bg-[#E8EEF2] border-border"
+             >
+               See Products
+             </Button>
+           </DialogTrigger>
+           <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+             <DialogHeader>
+               <DialogTitle>{business.name} - Products Catalog</DialogTitle>
+             </DialogHeader>
+             <div className="space-y-3">
+               {parseProductsCatalog(business.products_catalog).length > 0 ? (
+                 parseProductsCatalog(business.products_catalog).map((product: string, index: number) => (
+                   <div key={index} className="flex items-center space-x-2 p-3 bg-muted/50 rounded-lg">
+                     <Check className="w-4 h-4 text-primary" />
+                     <span className="text-sm">{product}</span>
+                   </div>
+                 ))
+               ) : (
+                 <div className="text-center py-8 text-muted-foreground">
+                   <p>No products catalog available</p>
+                 </div>
+               )}
+             </div>
+           </DialogContent>
+         </Dialog>
+         
+         <div className="flex items-center gap-2">
+           {business.facebook_page && (
+             <div 
+               className="w-7 h-7 rounded-full border border-border shadow-md flex items-center justify-center bg-background hover:shadow-lg transition-shadow cursor-pointer"
+               onClick={() => window.open(business.facebook_page, '_blank')}
+             >
+               <Facebook className="w-3 h-3 text-blue-600" />
+             </div>
+           )}
+           {business.tiktok_url && (
+             <div 
+               className="w-7 h-7 rounded-full border border-border shadow-md flex items-center justify-center bg-background hover:shadow-lg transition-shadow cursor-pointer"
+               onClick={() => window.open(business.tiktok_url, '_blank')}
+             >
+               <Instagram className="w-3 h-3 text-pink-600" />
+             </div>
+           )}
+           {business.phone && (
+             <div 
+               className="w-7 h-7 rounded-full border border-border shadow-md flex items-center justify-center bg-background hover:shadow-lg transition-shadow cursor-pointer"
+               onClick={() => window.open(`https://wa.me/${business.phone.replace(/[^\d]/g, '')}`, '_blank')}
+             >
+               <MessageCircle className="w-3 h-3 text-green-600" />
+             </div>
+           )}
+         </div>
        </div>
      </Card>
   );
