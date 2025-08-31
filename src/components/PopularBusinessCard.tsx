@@ -279,6 +279,10 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
           </Button>
          </div>
        </CardContent>
+       
+       {/* Light gray bottom section */}
+       <div className="h-[50px] bg-muted rounded-b-lg border-t border-border">
+       </div>
      </Card>
   );
 };
