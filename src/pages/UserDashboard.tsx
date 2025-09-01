@@ -256,25 +256,30 @@ export default function UserDashboard() {
     switch (activeSection) {
       case "profile":
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Profile Information</h2>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center space-x-4">
-                  <Avatar className="h-20 w-20">
+          <div className="space-y-6 animate-fade-in">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">Profile Information</h2>
+            <Card className="bg-dashboard-card-bg border-0 shadow-xl overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-dashboard-gradient-start/5 to-dashboard-gradient-end/5"></div>
+              <CardContent className="pt-8 relative">
+                <div className="flex items-center space-x-6">
+                  <Avatar className="h-24 w-24 ring-4 ring-primary/20 shadow-lg">
                     <AvatarImage src={profile?.avatar_url} />
-                    <AvatarFallback>
+                    <AvatarFallback className="bg-gradient-to-br from-dashboard-gradient-start to-dashboard-gradient-end text-white text-2xl">
                       {profile?.display_name?.[0] || user?.email?.[0]?.toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <div>
-                    <h3 className="text-lg font-medium">
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-bold">
                       {profile?.display_name || "No display name set"}
                     </h3>
-                    <p className="text-muted-foreground">{user?.email}</p>
-                    <p className="text-sm text-muted-foreground capitalize">
-                      Role: {profile?.role || "user"}
-                    </p>
+                    <p className="text-muted-foreground text-lg">{user?.email}</p>
+                    <div className="flex items-center gap-2">
+                      <div className="px-3 py-1 bg-primary/10 rounded-full">
+                        <p className="text-sm font-medium text-primary capitalize">
+                          {profile?.role || "user"}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -284,8 +289,8 @@ export default function UserDashboard() {
       
       case "email":
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Email Settings</h2>
+          <div className="space-y-6 animate-fade-in">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">Email Settings</h2>
             <Card>
               <CardHeader>
                 <CardTitle>Primary Email</CardTitle>
@@ -302,8 +307,8 @@ export default function UserDashboard() {
 
       case "wishlists":
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Saved Listings</h2>
+          <div className="space-y-6 animate-fade-in">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">Saved Listings</h2>
             {loadingBookmarks ? (
               <div className="text-center py-8">
                 <p className="text-muted-foreground">Loading your saved businesses...</p>
@@ -339,8 +344,8 @@ export default function UserDashboard() {
 
       case "listings":
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">My Business Listings</h2>
+          <div className="space-y-6 animate-fade-in">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">My Business Listings</h2>
             {loadingBusinesses ? (
               <div className="text-center py-8">
                 <p className="text-muted-foreground">Loading your businesses...</p>
@@ -389,8 +394,8 @@ export default function UserDashboard() {
 
       case "add-listing":
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Add New Business Listing</h2>
+          <div className="space-y-6 animate-fade-in">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">Add New Business Listing</h2>
             <BusinessForm onSuccess={() => {
               setActiveSection("listings");
               fetchUserBusinesses();
@@ -402,8 +407,8 @@ export default function UserDashboard() {
         const activePOSBusinesses = userBusinesses.filter(business => business["POS+Website"] === 1);
         
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Subscription</h2>
+          <div className="space-y-6 animate-fade-in">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">Subscription</h2>
             <Card>
               <CardHeader>
                 <CardTitle>Business Listing</CardTitle>
@@ -490,49 +495,124 @@ export default function UserDashboard() {
 
       default:
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Welcome to Your Dashboard</h2>
+          <div className="space-y-8">
+            <div className="text-center py-4">
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent mb-2">
+                Dashboard Overview
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Track your business performance and manage your listings from one central place
+              </p>
+            </div>
+            
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Building2 className="h-5 w-5" />
+              <Card className="relative overflow-hidden bg-dashboard-card-bg border-0 shadow-lg hover:shadow-xl transition-all duration-300 animate-scale-in">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-blue-600/5"></div>
+                <CardHeader className="relative pb-3">
+                  <CardTitle className="flex items-center gap-3 text-lg">
+                    <div className="p-2 bg-blue-500/10 rounded-lg">
+                      <Building2 className="h-5 w-5 text-blue-600" />
+                    </div>
                     My Listings
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-2xl font-bold">{businessCount}</p>
-                  <p className="text-sm text-muted-foreground">Active listings</p>
+                <CardContent className="relative">
+                  <div className="flex items-end gap-2">
+                    <p className="text-3xl font-bold text-blue-600">{businessCount}</p>
+                    <p className="text-sm text-muted-foreground pb-1">active</p>
+                  </div>
+                  <div className="flex items-center gap-2 mt-3">
+                    <div className="h-2 flex-1 bg-blue-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full" style={{width: `${Math.min(businessCount * 20, 100)}%`}}></div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
               
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Heart className="h-5 w-5" />
+              <Card className="relative overflow-hidden bg-dashboard-card-bg border-0 shadow-lg hover:shadow-xl transition-all duration-300 animate-scale-in" style={{animationDelay: '0.1s'}}>
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-pink-600/5"></div>
+                <CardHeader className="relative pb-3">
+                  <CardTitle className="flex items-center gap-3 text-lg">
+                    <div className="p-2 bg-pink-500/10 rounded-lg">
+                      <Heart className="h-5 w-5 text-pink-600" />
+                    </div>
                     Saved
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-2xl font-bold">{bookmarkCount}</p>
-                  <p className="text-sm text-muted-foreground">Saved businesses</p>
+                <CardContent className="relative">
+                  <div className="flex items-end gap-2">
+                    <p className="text-3xl font-bold text-pink-600">{bookmarkCount}</p>
+                    <p className="text-sm text-muted-foreground pb-1">bookmarks</p>
+                  </div>
+                  <div className="flex items-center gap-2 mt-3">
+                    <div className="h-2 flex-1 bg-pink-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-pink-500 to-pink-600 rounded-full" style={{width: `${Math.min(bookmarkCount * 10, 100)}%`}}></div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
               
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <CreditCard className="h-5 w-5" />
-                    Plan
+              <Card className="relative overflow-hidden bg-dashboard-card-bg border-0 shadow-lg hover:shadow-xl transition-all duration-300 animate-scale-in" style={{animationDelay: '0.2s'}}>
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-green-600/5"></div>
+                <CardHeader className="relative pb-3">
+                  <CardTitle className="flex items-center gap-3 text-lg">
+                    <div className="p-2 bg-green-500/10 rounded-lg">
+                      <CreditCard className="h-5 w-5 text-green-600" />
+                    </div>
+                    Current Plan
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-lg font-medium">Free</p>
-                  <Button variant="outline" size="sm" className="mt-2">
-                    Upgrade
-                  </Button>
+                <CardContent className="relative">
+                  <div className="space-y-3">
+                    <p className="text-2xl font-bold text-green-600">Free Tier</p>
+                    <p className="text-sm text-muted-foreground">Basic features included</p>
+                    <Button size="sm" className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 border-0">
+                      Upgrade Plan
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
+            </div>
+            
+            {/* Quick Actions Section */}
+            <div className="mt-12 animate-slide-up">
+              <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                <Plus className="h-5 w-5 text-primary" />
+                Quick Actions
+              </h3>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Button 
+                  onClick={() => handleSidebarAction("add-listing")}
+                  className="h-auto p-6 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 flex-col gap-2 border-0 shadow-lg"
+                >
+                  <Plus className="h-6 w-6" />
+                  <span className="font-medium">Add Listing</span>
+                </Button>
+                <Button 
+                  onClick={() => handleSidebarAction("listings")}
+                  variant="outline"
+                  className="h-auto p-6 flex-col gap-2 bg-dashboard-card-bg hover:bg-dashboard-accent border-dashboard-shadow"
+                >
+                  <Building2 className="h-6 w-6" />
+                  <span className="font-medium">Manage Listings</span>
+                </Button>
+                <Button 
+                  onClick={() => handleSidebarAction("wishlists")}
+                  variant="outline"
+                  className="h-auto p-6 flex-col gap-2 bg-dashboard-card-bg hover:bg-dashboard-accent border-dashboard-shadow"
+                >
+                  <Heart className="h-6 w-6" />
+                  <span className="font-medium">View Saved</span>
+                </Button>
+                <Button 
+                  onClick={() => handleSidebarAction("website-pos")}
+                  variant="outline"
+                  className="h-auto p-6 flex-col gap-2 bg-dashboard-card-bg hover:bg-dashboard-accent border-dashboard-shadow"
+                >
+                  <Globe className="h-6 w-6" />
+                  <span className="font-medium">Get Website</span>
+                </Button>
+              </div>
             </div>
           </div>
         );
@@ -559,24 +639,28 @@ export default function UserDashboard() {
     };
 
     return (
-      <Sidebar className="border-r md:mt-16 md:h-[calc(100vh-4rem)]">
+      <Sidebar className="border-r md:mt-16 md:h-[calc(100vh-4rem)] bg-sidebar/50 backdrop-blur-sm">
         <SidebarContent>
           {/* User Info Section */}
-          <div className="p-4 border-b border-border">
-            <div className="flex items-center space-x-3">
-              <Avatar>
+          <div className="p-6 border-b border-sidebar-border/50">
+            <div className="flex items-center space-x-4">
+              <Avatar className="h-12 w-12 ring-2 ring-primary/20">
                 <AvatarImage src={profile?.avatar_url} />
-                <AvatarFallback>
+                <AvatarFallback className="bg-gradient-to-br from-dashboard-gradient-start to-dashboard-gradient-end text-white">
                   {profile?.display_name?.[0] || user?.email?.[0]?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0 flex-1">
-                <p className="font-medium text-sm truncate">
+                <p className="font-semibold text-sm truncate">
                   {profile?.display_name || "User"}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
                   {user?.email}
                 </p>
+                <div className="flex items-center gap-1 mt-1">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-xs text-green-600 font-medium">Online</span>
+                </div>
               </div>
             </div>
           </div>
@@ -589,10 +673,10 @@ export default function UserDashboard() {
                     <SidebarMenuButton
                       onClick={() => handleMenuClick(item.action)}
                       isActive={activeSection === item.action}
-                      className="w-full justify-start"
+                      className="w-full justify-start py-3 px-4 rounded-lg transition-all duration-200 hover:bg-sidebar-accent/80 data-[active=true]:bg-gradient-to-r data-[active=true]:from-primary/10 data-[active=true]:to-primary/5 data-[active=true]:border-primary/20 data-[active=true]:shadow-sm"
                     >
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
+                      <item.icon className="h-5 w-5" />
+                      <span className="font-medium">{item.title}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -633,7 +717,7 @@ export default function UserDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-16">
+    <div className="min-h-screen bg-dashboard-bg pt-16">
       <Navbar />
       <div className="flex">
         <SidebarProvider>
@@ -643,28 +727,42 @@ export default function UserDashboard() {
           <div className="md:hidden">
             <AppSidebar />
           </div>
-          <main className="flex-1 p-6 overflow-auto ml-0">
-            <div className="flex items-center justify-between mb-6">
-              <SidebarTrigger />
-              <div className="flex items-center space-x-2">
-                <Avatar>
-                  <AvatarImage src={profile?.avatar_url} />
-                  <AvatarFallback>
-                    {profile?.display_name?.[0] || user?.email?.[0]?.toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium">
-                    {profile?.display_name || "User"}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {user?.email}
-                  </p>
+          <main className="flex-1 p-6 lg:p-8 overflow-auto ml-0 bg-gradient-to-br from-dashboard-bg via-dashboard-accent to-dashboard-bg">
+            {/* Header Section with Gradient */}
+            <div className="relative mb-8">
+              <div className="absolute inset-0 bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end rounded-2xl opacity-10"></div>
+              <div className="relative flex items-center justify-between p-6 rounded-2xl bg-dashboard-card-bg/50 backdrop-blur-sm border border-white/20 shadow-lg">
+                <div className="flex items-center gap-4">
+                  <SidebarTrigger className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors" />
+                  <div>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">
+                      Welcome back, {profile?.display_name || "User"}!
+                    </h1>
+                    <p className="text-muted-foreground">Manage your business presence with ease</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Avatar className="h-12 w-12 ring-2 ring-primary/20">
+                    <AvatarImage src={profile?.avatar_url} />
+                    <AvatarFallback className="bg-gradient-to-br from-dashboard-gradient-start to-dashboard-gradient-end text-white">
+                      {profile?.display_name?.[0] || user?.email?.[0]?.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="hidden sm:block">
+                    <p className="font-medium">
+                      {profile?.display_name || "User"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {user?.email}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
             
-            {getDashboardContent()}
+            <div className="animate-fade-in">
+              {getDashboardContent()}
+            </div>
           </main>
         </SidebarProvider>
       </div>

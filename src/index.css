@@ -55,6 +55,15 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
     
     --footer-background: 210 25% 97%;
+    
+    /* Dashboard Enhancement Colors */
+    --dashboard-bg: 254 100% 99%;
+    --dashboard-card-bg: 0 0% 100%;
+    --dashboard-accent: 254 100% 97%;
+    --dashboard-gradient-start: 254 88% 67%;
+    --dashboard-gradient-end: 220 70% 65%;
+    --dashboard-stat-bg: 254 100% 98%;
+    --dashboard-shadow: 254 30% 85%;
   }
 
   .dark {
@@ -93,6 +102,15 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Dark mode dashboard colors */
+    --dashboard-bg: 222.2 84% 4.9%;
+    --dashboard-card-bg: 217.2 32.6% 17.5%;
+    --dashboard-accent: 217.2 32.6% 25%;
+    --dashboard-gradient-start: 254 88% 67%;
+    --dashboard-gradient-end: 220 70% 65%;
+    --dashboard-stat-bg: 217.2 32.6% 20%;
+    --dashboard-shadow: 217.2 32.6% 8%;
   }
 }
 
