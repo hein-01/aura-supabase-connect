@@ -22,13 +22,13 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Left Side - Logo and Find Shops */}
           <div className="flex items-center space-x-6">
-            <Link to="/" className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2 relative z-50">
               <Building2 className="h-6 w-6 text-primary border border-gray-300 rounded p-1" />
               <span className="text-xl font-bold text-foreground">wellfinds</span>
             </Link>
             
             {/* Find Shops next to logo */}
-            <div className="hidden md:flex">
+            <div className="hidden md:flex relative z-50">
               <Link
                 to="/find-shops"
                 className="text-muted-foreground hover:text-foreground font-medium"

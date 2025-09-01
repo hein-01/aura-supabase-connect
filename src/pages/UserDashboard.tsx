@@ -642,11 +642,13 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <div className="relative">
+        <Navbar />
+      </div>
       <div className="flex">
         <SidebarProvider>
           <AppSidebar />
-          <main className="flex-1 p-6 overflow-auto">
+          <main className="flex-1 p-6 overflow-auto ml-0">
             <div className="flex items-center justify-between mb-6">
               <SidebarTrigger />
               <div className="flex items-center space-x-2">
