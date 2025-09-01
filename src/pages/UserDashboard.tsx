@@ -29,6 +29,7 @@ import {
   SidebarMenuButton,
   SidebarProvider,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -538,68 +539,88 @@ export default function UserDashboard() {
     }
   };
 
-  const AppSidebar = () => (
-    <Sidebar className="border-r">
-      <SidebarContent>
-        {/* Logo Section */}
-        <div className="p-4 border-b border-border">
-          <Link to="/" className="flex items-center space-x-2">
-            <Building2 className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold text-foreground">wellfinds</span>
-          </Link>
-        </div>
-        
-        {/* User Info Section */}
-        <div className="p-4 border-b border-border">
-          <div className="flex items-center space-x-3">
-            <Avatar>
-              <AvatarImage src={profile?.avatar_url} />
-              <AvatarFallback>
-                {profile?.display_name?.[0] || user?.email?.[0]?.toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0 flex-1">
-              <p className="font-medium text-sm truncate">
-                {profile?.display_name || "User"}
-              </p>
-              <p className="text-xs text-muted-foreground truncate">
-                {user?.email}
-              </p>
+  const AppSidebar = () => {
+    const { setOpenMobile, isMobile } = useSidebar();
+    
+    const handleMenuClick = (action: string) => {
+      handleSidebarAction(action);
+      // Close mobile sidebar when a menu item is clicked
+      if (isMobile) {
+        setOpenMobile(false);
+      }
+    };
+
+    const handleLogoutClick = () => {
+      handleSignOut();
+      // Close mobile sidebar when logout is clicked
+      if (isMobile) {
+        setOpenMobile(false);
+      }
+    };
+
+    return (
+      <Sidebar className="border-r">
+        <SidebarContent>
+          {/* Logo Section */}
+          <div className="p-4 border-b border-border">
+            <Link to="/" className="flex items-center space-x-2">
+              <Building2 className="h-6 w-6 text-primary" />
+              <span className="text-xl font-bold text-foreground">wellfinds</span>
+            </Link>
+          </div>
+          
+          {/* User Info Section */}
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center space-x-3">
+              <Avatar>
+                <AvatarImage src={profile?.avatar_url} />
+                <AvatarFallback>
+                  {profile?.display_name?.[0] || user?.email?.[0]?.toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="min-w-0 flex-1">
+                <p className="font-medium text-sm truncate">
+                  {profile?.display_name || "User"}
+                </p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {user?.email}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {sidebarItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+          
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {sidebarItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      onClick={() => handleMenuClick(item.action)}
+                      isActive={activeSection === item.action}
+                      className="w-full justify-start"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+                
+                <SidebarMenuItem>
                   <SidebarMenuButton
-                    onClick={() => handleSidebarAction(item.action)}
-                    isActive={activeSection === item.action}
-                    className="w-full justify-start"
+                    onClick={handleLogoutClick}
+                    className="w-full justify-start text-destructive hover:text-destructive"
                   >
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.title}</span>
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={handleSignOut}
-                  className="w-full justify-start text-destructive hover:text-destructive"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span>Logout</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
-  );
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    );
+  };
 
   if (!user) {
     return (
