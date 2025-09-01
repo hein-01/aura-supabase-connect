@@ -633,10 +633,8 @@ export default function UserDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="relative z-50">
-        <Navbar />
-      </div>
+    <div className="min-h-screen bg-background pt-16">
+      <Navbar />
       <div className="flex">
         <SidebarProvider>
           <div className="hidden md:block">
