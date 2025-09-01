@@ -559,7 +559,7 @@ export default function UserDashboard() {
     };
 
     return (
-      <Sidebar className="border-r">
+      <Sidebar className="border-r md:mt-16 md:h-[calc(100vh-4rem)]">
         <SidebarContent>
           {/* User Info Section */}
           <div className="p-4 border-b border-border">
@@ -634,12 +634,17 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="relative">
+      <div className="relative z-50">
         <Navbar />
       </div>
       <div className="flex">
         <SidebarProvider>
-          <AppSidebar />
+          <div className="hidden md:block">
+            <AppSidebar />
+          </div>
+          <div className="md:hidden">
+            <AppSidebar />
+          </div>
           <main className="flex-1 p-6 overflow-auto ml-0">
             <div className="flex items-center justify-between mb-6">
               <SidebarTrigger />
