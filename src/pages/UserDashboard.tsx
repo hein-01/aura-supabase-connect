@@ -561,14 +561,6 @@ export default function UserDashboard() {
     return (
       <Sidebar className="border-r">
         <SidebarContent>
-          {/* Logo Section */}
-          <div className="p-4 border-b border-border">
-            <Link to="/" className="flex items-center space-x-2">
-              <Building2 className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold text-foreground">wellfinds</span>
-            </Link>
-          </div>
-          
           {/* User Info Section */}
           <div className="p-4 border-b border-border">
             <div className="flex items-center space-x-3">
