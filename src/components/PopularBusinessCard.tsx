@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDateWithOrdinal } from '@/lib/dateUtils';
 import AuthModal from './AuthModal';
+import { InlineAuthForm } from './InlineAuthForm';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -52,6 +53,7 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [showAuthInReviewModal, setShowAuthInReviewModal] = useState(false);
   const { toast } = useToast();
 
   // Fetch existing reviews when modal opens
@@ -137,11 +139,7 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast({
-          title: "Authentication required",
-          description: "Please sign in to submit a review.",
-          variant: "destructive",
-        });
+        setShowAuthInReviewModal(true);
         return;
       }
 
@@ -389,7 +387,12 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
       
       {/* Light green section positioned under the product images */}
       <div className="h-[26px] bg-[#58BB8A] flex items-center justify-between px-2">
-        <Dialog open={openReviewModal} onOpenChange={setOpenReviewModal}>
+        <Dialog open={openReviewModal} onOpenChange={(open) => {
+          setOpenReviewModal(open);
+          if (!open) {
+            setShowAuthInReviewModal(false);
+          }
+        }}>
           <DialogTrigger asChild>
             <Button
               variant="outline"
@@ -401,72 +404,100 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
           </DialogTrigger>
           <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Reviews for {business.name}</DialogTitle>
+              <DialogTitle>
+                {showAuthInReviewModal ? 'Sign In to Review' : `Reviews for ${business.name}`}
+              </DialogTitle>
             </DialogHeader>
             
-            {/* Existing Reviews Section */}
-            <div className="space-y-4 mb-6">
-              {loadingReviews ? (
-                <div className="text-center py-4">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
-                  <p className="text-sm text-muted-foreground mt-2">Loading reviews...</p>
-                </div>
-              ) : existingReviews.length > 0 ? (
-                <>
-                  <h3 className="font-medium text-sm text-foreground">Customer Reviews ({existingReviews.length})</h3>
-                  <div className="space-y-3 max-h-60 overflow-y-auto">
-                    {existingReviews.map((review) => (
-                      <div key={review.id} className="border rounded-lg p-3 bg-muted/30">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="font-medium text-sm">
-                            {review.profiles?.display_name || 'Anonymous'}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {formatDateWithOrdinal(review.created_at)}
-                          </span>
-                        </div>
-                        <p className="text-sm text-foreground">{review.comment}</p>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <div className="text-center py-4">
-                  <p className="text-sm text-muted-foreground">No reviews yet. Be the first to review!</p>
-                </div>
-              )}
-            </div>
-            
-            {/* Review Form */}
-            <div className="border-t pt-4">
-              <h3 className="font-medium text-sm text-foreground mb-4">Write a Review</h3>
-              <form onSubmit={handleReviewSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="comment">Your Review</Label>
-                <Textarea
-                  id="comment"
-                  placeholder="Share your experience with this business..."
-                  value={reviewData.comment}
-                  onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
-                  required
-                  rows={4}
+            {showAuthInReviewModal ? (
+              /* Authentication Form */
+              <div className="space-y-4">
+                <InlineAuthForm 
+                  onSuccess={() => {
+                    setShowAuthInReviewModal(false);
+                    toast({
+                      title: "Success",
+                      description: "You can now submit your review!",
+                    });
+                  }}
                 />
+                <div className="flex justify-center">
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setShowAuthInReviewModal(false)}
+                    className="text-sm"
+                  >
+                    Back to Reviews
+                  </Button>
+                </div>
               </div>
-              
-              <div className="flex justify-end gap-2">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => setOpenReviewModal(false)}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={isSubmitting || !reviewData.comment.trim()}>
-                  {isSubmitting ? 'Submitting...' : 'Submit Review'}
-                </Button>
-              </div>
-            </form>
-            </div>
+            ) : (
+              <>
+                {/* Existing Reviews Section */}
+                <div className="space-y-4 mb-6">
+                  {loadingReviews ? (
+                    <div className="text-center py-4">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
+                      <p className="text-sm text-muted-foreground mt-2">Loading reviews...</p>
+                    </div>
+                  ) : existingReviews.length > 0 ? (
+                    <>
+                      <h3 className="font-medium text-sm text-foreground">Customer Reviews ({existingReviews.length})</h3>
+                      <div className="space-y-3 max-h-60 overflow-y-auto">
+                        {existingReviews.map((review) => (
+                          <div key={review.id} className="border rounded-lg p-3 bg-muted/30">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="font-medium text-sm">
+                                {review.profiles?.display_name || 'Anonymous'}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                {formatDateWithOrdinal(review.created_at)}
+                              </span>
+                            </div>
+                            <p className="text-sm text-foreground">{review.comment}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-sm text-muted-foreground">No reviews yet. Be the first to review!</p>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Review Form */}
+                <div className="border-t pt-4">
+                  <h3 className="font-medium text-sm text-foreground mb-4">Write a Review</h3>
+                  <form onSubmit={handleReviewSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="comment">Your Review</Label>
+                    <Textarea
+                      id="comment"
+                      placeholder="Share your experience with this business..."
+                      value={reviewData.comment}
+                      onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
+                      required
+                      rows={4}
+                    />
+                  </div>
+                  
+                  <div className="flex justify-end gap-2">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => setOpenReviewModal(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={isSubmitting || !reviewData.comment.trim()}>
+                      {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                    </Button>
+                  </div>
+                </form>
+                </div>
+              </>
+            )}
           </DialogContent>
         </Dialog>
         {isLicenseValid(business.license_expired_date) && (
