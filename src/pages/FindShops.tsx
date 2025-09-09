@@ -40,7 +40,13 @@ export default function FindShops() {
   }, []);
 
   useEffect(() => {
-    fetchBusinesses();
+    // Only fetch if there's a search term, category filter, or location filter
+    if (searchTerm || selectedCategory !== "all" || locationFilter) {
+      fetchBusinesses();
+    } else {
+      setBusinesses([]);
+      setLoading(false);
+    }
   }, [searchTerm, selectedCategory, locationFilter]);
 
   const fetchCategories = async () => {
@@ -113,16 +119,6 @@ export default function FindShops() {
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            Find Local Shops
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Discover amazing local businesses in your area. From restaurants to retail stores, 
-            find exactly what you're looking for.
-          </p>
-        </div>
-
         <SearchFilters
           onSearchChange={setSearchTerm}
           onCategoryChange={setSelectedCategory}
