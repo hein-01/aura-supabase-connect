@@ -13,6 +13,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDateWithOrdinal } from '@/lib/dateUtils';
+import AuthModal from './AuthModal';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -50,6 +51,7 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
   const [loadingReviews, setLoadingReviews] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const { toast } = useToast();
 
   // Fetch existing reviews when modal opens
@@ -193,11 +195,7 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast({
-          title: "Authentication required",
-          description: "Please sign in to bookmark businesses.",
-          variant: "destructive",
-        });
+        setAuthModalOpen(true);
         return;
       }
 
@@ -299,7 +297,8 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
   const hasMultipleImages = business.product_images && business.product_images.length > 1;
 
   return (
-    <Card className="group w-[280px] h-[475px] flex flex-col shadow-lg hover:shadow-2xl transition-all duration-300 mx-auto">
+    <>
+      <Card className="group w-[280px] h-[475px] flex flex-col shadow-lg hover:shadow-2xl transition-all duration-300 mx-auto">
       <div className="relative overflow-hidden rounded-t-lg">
         <Swiper
           modules={[Navigation, Pagination]}
@@ -587,5 +586,11 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
           </div>
        </div>
      </Card>
+     
+     <AuthModal 
+       open={authModalOpen} 
+       onOpenChange={setAuthModalOpen} 
+     />
+   </>
   );
 };
