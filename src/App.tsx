@@ -21,6 +21,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ListAndGetPOS from "./pages/ListAndGetPOS";
 import UserDashboard from "./pages/UserDashboard";
 import MobileNavBar from "./components/MobileNavBar";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <div className="pb-[75px] md:pb-0">
           <Routes>
             <Route path="/" element={<Index />} />
