@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { Search, MapPin, Filter } from "lucide-react";
+import { FiltersModal } from "./FiltersModal";
 
 interface SearchFiltersProps {
   onSearchChange: (search: string) => void;
@@ -87,6 +88,24 @@ export const SearchFilters = ({
         </div>
         
         <div className="flex gap-2">
+          <FiltersModal
+            onSearchChange={onSearchChange}
+            onCategoryChange={onCategoryChange}
+            onLocationChange={onLocationChange}
+            categories={categories}
+            initialSearchTerm={initialSearchTerm}
+            initialCategory={initialCategory}
+          >
+            <Button 
+              type="button" 
+              variant="outline"
+              className="border-2 shadow-md hover:shadow-lg transition-shadow duration-200"
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              Filters
+            </Button>
+          </FiltersModal>
+          
           <Button 
             type="button" 
             onClick={() => handleSearchSubmit(new Event('submit') as any)}
@@ -94,6 +113,7 @@ export const SearchFilters = ({
           >
             Search
           </Button>
+          
           <Button 
             type="button" 
             variant="outline" 
