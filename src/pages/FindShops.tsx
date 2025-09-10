@@ -206,7 +206,7 @@ export default function FindShops() {
               <button
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-8 py-3 bg-primary text-primary-foreground rounded-lg border-2 border-primary shadow-lg hover:shadow-xl hover:bg-primary/90 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-200"
               >
                 {loadingMore ? "Loading..." : "Load More"}
               </button>

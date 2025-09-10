@@ -40,9 +40,9 @@ export const SearchFilters = ({
   };
 
   return (
-    <Card className="p-6 mb-6">
+    <Card className="p-6 mb-6 shadow-lg border-2 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-background to-muted/30">
       <div className="space-y-4">
-        <div className="flex items-center gap-2 text-lg font-semibold">
+        <div className="flex items-center gap-2 text-lg font-semibold text-primary">
           <Filter className="h-5 w-5" />
           Search & Filters
         </div>
@@ -55,13 +55,13 @@ export const SearchFilters = ({
               placeholder="Search businesses..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10"
+              className="pl-10 border-2 shadow-sm hover:shadow-md focus:shadow-lg transition-shadow duration-200"
             />
           </form>
           
           {/* Category Filter */}
           <Select onValueChange={onCategoryChange} defaultValue={initialCategory}>
-            <SelectTrigger>
+            <SelectTrigger className="border-2 shadow-sm hover:shadow-md focus:shadow-lg transition-shadow duration-200">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
@@ -81,18 +81,23 @@ export const SearchFilters = ({
               placeholder="City, State..."
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="pl-10"
+              className="pl-10 border-2 shadow-sm hover:shadow-md focus:shadow-lg transition-shadow duration-200"
             />
           </form>
         </div>
         
         <div className="flex gap-2">
-          <Button type="button" onClick={() => handleSearchSubmit(new Event('submit') as any)}>
+          <Button 
+            type="button" 
+            onClick={() => handleSearchSubmit(new Event('submit') as any)}
+            className="shadow-md hover:shadow-lg transition-shadow duration-200"
+          >
             Search
           </Button>
           <Button 
             type="button" 
             variant="outline" 
+            className="border-2 shadow-md hover:shadow-lg transition-shadow duration-200"
             onClick={() => {
               setSearch("");
               setLocation("");
