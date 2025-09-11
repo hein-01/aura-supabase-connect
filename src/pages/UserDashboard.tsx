@@ -349,11 +349,6 @@ export default function UserDashboard() {
       case "wishlists":
         return (
           <div className="space-y-6 animate-fade-in">
-            <BackButton 
-              to="/dashboard" 
-              className=""
-              onClick={() => setActiveSection("dashboard")} 
-            />
             <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">Saved Listings</h2>
             {loadingBookmarks ? (
               <LoadingSpinner />
@@ -378,11 +373,6 @@ export default function UserDashboard() {
       case "listings":
         return (
           <div className="space-y-6 animate-fade-in">
-            <BackButton 
-              to="/dashboard" 
-              className=""
-              onClick={() => setActiveSection("dashboard")} 
-            />
             <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">My Business Listings</h2>
             {loadingBusinesses ? (
               <LoadingSpinner />
@@ -426,11 +416,6 @@ export default function UserDashboard() {
       case "add-listing":
         return (
           <div className="space-y-6 animate-fade-in">
-            <BackButton 
-              to="/dashboard" 
-              className=""
-              onClick={() => setActiveSection("dashboard")} 
-            />
             <h2 className="text-3xl font-bold bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end bg-clip-text text-transparent">List Your Business</h2>
             <BusinessForm onSuccess={() => {
               setActiveSection("listings");
@@ -724,6 +709,17 @@ export default function UserDashboard() {
             <AppSidebar />
           </div>
           <main className="flex-1 p-6 lg:p-8 overflow-auto ml-0 bg-gradient-to-br from-dashboard-bg via-dashboard-accent to-dashboard-bg">
+            {/* Back Button - appears above greeting for non-dashboard sections */}
+            {activeSection !== "dashboard" && (
+              <div className="mb-4">
+                <BackButton 
+                  to="/dashboard" 
+                  className=""
+                  onClick={() => setActiveSection("dashboard")} 
+                />
+              </div>
+            )}
+            
             {/* Header Section with Gradient */}
             <div className="relative mb-8">
               <div className="absolute inset-0 bg-gradient-to-r from-dashboard-gradient-start to-dashboard-gradient-end rounded-2xl opacity-10"></div>
