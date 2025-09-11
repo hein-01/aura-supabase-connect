@@ -81,6 +81,9 @@ export default function BusinessForm({ onSuccess, editingBusiness }: BusinessFor
   const [newProductName, setNewProductName] = useState("");
   const [listingPrice, setListingPrice] = useState<string>("");
   const [odooPrice, setOdooPrice] = useState<string>("");
+  const [locations, setLocations] = useState<Array<{ id: string; province_district: string; towns: string[] }>>([]);
+  const [selectedProvince, setSelectedProvince] = useState<string>(editingBusiness?.state || "");
+  const [availableTowns, setAvailableTowns] = useState<string[]>([]);
   
   const [formData, setFormData] = useState<BusinessFormData>({
     name: editingBusiness?.name || "",
@@ -114,7 +117,7 @@ export default function BusinessForm({ onSuccess, editingBusiness }: BusinessFor
     }
   };
 
-  // Fetch plan prices when component mounts
+  // Fetch plan prices and locations when component mounts
   useEffect(() => {
     const fetchPlanPrices = async () => {
       try {
@@ -135,11 +138,44 @@ export default function BusinessForm({ onSuccess, editingBusiness }: BusinessFor
       }
     };
 
+    const fetchLocations = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('locations')
+          .select('id, province_district, towns')
+          .order('province_district');
+
+        if (error) throw error;
+
+        setLocations(data || []);
+        
+        // If editing and has existing state, set up towns
+        if (editingBusiness?.state) {
+          const location = data?.find(loc => loc.province_district === editingBusiness.state);
+          if (location) {
+            setAvailableTowns(location.towns || []);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching locations:', error);
+      }
+    };
+
     fetchPlanPrices();
-  }, []);
+    fetchLocations();
+  }, [editingBusiness?.state]);
 
   const handleInputChange = (field: keyof BusinessFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleProvinceChange = (province: string) => {
+    setSelectedProvince(province);
+    setFormData(prev => ({ ...prev, state: province, city: "" }));
+    
+    // Find towns for selected province
+    const location = locations.find(loc => loc.province_district === province);
+    setAvailableTowns(location?.towns || []);
   };
 
   const handleOptionChange = (option: string, checked: boolean) => {
@@ -612,16 +648,36 @@ export default function BusinessForm({ onSuccess, editingBusiness }: BusinessFor
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Input
-                value={formData.city}
-                onChange={(e) => handleInputChange('city', e.target.value)}
-                placeholder="City"
-              />
-              <Input
-                value={formData.state}
-                onChange={(e) => handleInputChange('state', e.target.value)}
-                placeholder="State"
-              />
+              <div className="space-y-2">
+                <Label>Town</Label>
+                <Select value={formData.city} onValueChange={(value) => handleInputChange('city', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a town" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableTowns.map((town) => (
+                      <SelectItem key={town} value={town}>
+                        {town}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Province/District/State</Label>
+                <Select value={selectedProvince} onValueChange={handleProvinceChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select province/district/state" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {locations.map((location) => (
+                      <SelectItem key={location.id} value={location.province_district}>
+                        {location.province_district}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <Input
                 value={formData.zipCode}
                 onChange={(e) => handleInputChange('zipCode', e.target.value)}
