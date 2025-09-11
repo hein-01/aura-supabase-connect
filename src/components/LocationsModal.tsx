@@ -44,9 +44,8 @@ export const LocationsModal = ({
       try {
         const { data, error } = await supabase
           .from("locations")
-          .select("*")
-          .order("province_district")
-          .order("town");
+          .select("id, province_district, towns")
+          .order("province_district");
 
         if (error) throw error;
 
