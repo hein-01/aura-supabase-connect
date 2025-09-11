@@ -649,6 +649,21 @@ export default function BusinessForm({ onSuccess, editingBusiness }: BusinessFor
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
+                <Label>Province/District/State</Label>
+                <Select value={selectedProvince} onValueChange={handleProvinceChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select province/district/state" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {locations.map((location) => (
+                      <SelectItem key={location.id} value={location.province_district}>
+                        {location.province_district}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
                 <Label>Town</Label>
                 <Select value={formData.city} onValueChange={(value) => handleInputChange('city', value)}>
                   <SelectTrigger>
@@ -664,25 +679,13 @@ export default function BusinessForm({ onSuccess, editingBusiness }: BusinessFor
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Province/District/State</Label>
-                <Select value={selectedProvince} onValueChange={handleProvinceChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select province/district/state" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {locations.map((location) => (
-                      <SelectItem key={location.id} value={location.province_district}>
-                        {location.province_district}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Label>Zip Code</Label>
+                <Input
+                  value={formData.zipCode}
+                  onChange={(e) => handleInputChange('zipCode', e.target.value)}
+                  placeholder="ZIP code"
+                />
               </div>
-              <Input
-                value={formData.zipCode}
-                onChange={(e) => handleInputChange('zipCode', e.target.value)}
-                placeholder="ZIP code"
-              />
             </div>
           </div>
 
