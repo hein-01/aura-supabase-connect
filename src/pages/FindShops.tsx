@@ -151,11 +151,9 @@ export default function FindShops() {
         }
       }
 
-      // Apply delivery filter - use contains to check if business_options array contains the selected options
+      // Apply delivery filter - match ANY selected option while ANDing with other filters
       if (deliveryFilter.length > 0) {
-        for (const option of deliveryFilter) {
-          query = query.contains("business_options", [option]);
-        }
+        query = query.overlaps("business_options", deliveryFilter);
       }
 
       const { data, error } = await query;
