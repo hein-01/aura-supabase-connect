@@ -134,7 +134,6 @@ export type Database = {
           address: string | null
           business_options: string[] | null
           category: string | null
-          city: string | null
           created_at: string
           description: string | null
           email: string | null
@@ -152,11 +151,12 @@ export type Database = {
           "POS+Website": number | null
           product_images: string[] | null
           products_catalog: string | null
+          province_district: string | null
           rating: number | null
           receipt_url: string | null
           starting_price: string | null
-          state: string | null
           tiktok_url: string | null
+          towns: string | null
           updated_at: string
           user_email: string | null
           website: string | null
@@ -166,7 +166,6 @@ export type Database = {
           address?: string | null
           business_options?: string[] | null
           category?: string | null
-          city?: string | null
           created_at?: string
           description?: string | null
           email?: string | null
@@ -184,11 +183,12 @@ export type Database = {
           "POS+Website"?: number | null
           product_images?: string[] | null
           products_catalog?: string | null
+          province_district?: string | null
           rating?: number | null
           receipt_url?: string | null
           starting_price?: string | null
-          state?: string | null
           tiktok_url?: string | null
+          towns?: string | null
           updated_at?: string
           user_email?: string | null
           website?: string | null
@@ -198,7 +198,6 @@ export type Database = {
           address?: string | null
           business_options?: string[] | null
           category?: string | null
-          city?: string | null
           created_at?: string
           description?: string | null
           email?: string | null
@@ -216,11 +215,12 @@ export type Database = {
           "POS+Website"?: number | null
           product_images?: string[] | null
           products_catalog?: string | null
+          province_district?: string | null
           rating?: number | null
           receipt_url?: string | null
           starting_price?: string | null
-          state?: string | null
           tiktok_url?: string | null
+          towns?: string | null
           updated_at?: string
           user_email?: string | null
           website?: string | null
@@ -428,6 +428,51 @@ export type Database = {
       provision_admin_user: {
         Args: { user_email: string }
         Returns: undefined
+      }
+      search_businesses: {
+        Args: {
+          category_id?: string
+          delivery_options?: string[]
+          location_province?: string
+          location_token?: string
+          location_town?: string
+          page?: number
+          page_size?: number
+          product_terms?: string[]
+          search_terms?: string[]
+        }
+        Returns: {
+          address: string | null
+          business_options: string[] | null
+          category: string | null
+          created_at: string
+          description: string | null
+          email: string | null
+          facebook_page: string | null
+          id: string
+          image_url: string | null
+          last_payment_date: string | null
+          license_expired_date: string | null
+          listing_expired_date: string | null
+          name: string
+          odoo_expired_date: string | null
+          owner_id: string
+          payment_status: string
+          phone: string | null
+          "POS+Website": number | null
+          product_images: string[] | null
+          products_catalog: string | null
+          province_district: string | null
+          rating: number | null
+          receipt_url: string | null
+          starting_price: string | null
+          tiktok_url: string | null
+          towns: string | null
+          updated_at: string
+          user_email: string | null
+          website: string | null
+          zip_code: string | null
+        }[]
       }
       verify_totp_token: {
         Args: { secret_key: string; token_input: string }

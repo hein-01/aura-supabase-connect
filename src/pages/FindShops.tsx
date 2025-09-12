@@ -89,74 +89,54 @@ export default function FindShops() {
       }
 
       const page = reset ? 0 : currentPage;
-      let query = supabase
-        .from("businesses")
-        .select("*")
-        .order("rating", { ascending: false })
-        .range(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE - 1);
-
-      // Apply enhanced search filter with phrase prioritization
-      if (searchTerm) {
-        // First try to find exact phrase matches
-        const phraseQuery = `name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,products_catalog.ilike.%${searchTerm}%`;
-        
-        // Check if phrase matches exist
-        const phraseResult = await supabase
-          .from("businesses")
-          .select("id")
-          .or(phraseQuery)
-          .limit(1);
-        
-        if (phraseResult.data && phraseResult.data.length > 0) {
-          // If phrase matches found, use phrase search
-          query = query.or(phraseQuery);
-        } else {
-          // If no phrase matches, fall back to expanded terms search
-          const expandedTerms = expandSearchTerms(searchTerm);
-          const searchQuery = expandedTerms
-            .map(term => `name.ilike.%${term}%,description.ilike.%${term}%,products_catalog.ilike.%${term}%`)
-            .join(',');
-          query = query.or(searchQuery);
-        }
-      }
-
-      // Apply category filter with ID mapping
+      
+      // Prepare search parameters for RPC call
+      const searchTerms = searchTerm ? [searchTerm] : null;
+      
+      // Get category ID for selected category
+      let categoryId = null;
       if (selectedCategory !== "all") {
         const categoryData = categories.find(cat => cat.name === selectedCategory);
-        if (categoryData) {
-          query = query.like("category", `%${categoryData.id}%`);
-        }
+        categoryId = categoryData?.id || null;
       }
-
-      // Apply product filter
-      if (selectedProducts.length > 0 && !selectedProducts.includes("All Products")) {
-        const productQuery = selectedProducts
-          .map(product => `products_catalog.ilike.%${product}%`)
-          .join(',');
-        query = query.or(productQuery);
-      }
-
-      // Apply location filter
+      
+      // Prepare product terms
+      const productTerms = selectedProducts.length > 0 && !selectedProducts.includes("All Products") 
+        ? selectedProducts 
+        : null;
+      
+      // Prepare location parameters
+      let locationToken = null;
+      let locationTown = null;
+      let locationProvince = null;
+      
       if (locationFilter) {
         if (locationFilter.includes(",")) {
           const [town, province] = locationFilter.split(",").map((s) => s.trim());
-          if (town) {
-            query = query.ilike("towns", `%${town}%`);
-          }
-          if (province) {
-            query = query.ilike("province_district", `%${province}%`);
-          }
+          locationTown = town || null;
+          locationProvince = province || null;
         } else {
-          query = query.or(`towns.ilike.%${locationFilter}%,province_district.ilike.%${locationFilter}%`);
+          locationToken = locationFilter;
         }
       }
+      
+      // Prepare delivery options
+      const deliveryOptions = deliveryFilter.length > 0 ? deliveryFilter : null;
 
-      // Apply delivery filter - match ANY selected option while ANDing with other filters
-      if (deliveryFilter.length > 0) {
-        query = query.overlaps("business_options", deliveryFilter);
-      }
+      // Call the RPC function with proper AND/OR logic
+      const { data, error } = await supabase.rpc('search_businesses', {
+        search_terms: searchTerms,
+        category_id: categoryId,
+        product_terms: productTerms,
+        location_token: locationToken,
+        location_town: locationTown,
+        location_province: locationProvince,
+        delivery_options: deliveryOptions,
+        page: page,
+        page_size: ITEMS_PER_PAGE
+      });
 
-      const { data, error } = await query;
+      if (error) throw error;
 
       if (error) throw error;
       
