@@ -151,10 +151,11 @@ export default function FindShops() {
         }
       }
 
-      // Apply delivery filter
+      // Apply delivery filter - use contains to check if business_options array contains the selected options
       if (deliveryFilter.length > 0) {
-        const deliveryQueries = deliveryFilter.map(option => `business_options.cs.{${option}}`);
-        query = query.or(deliveryQueries.join(','));
+        for (const option of deliveryFilter) {
+          query = query.contains("business_options", [option]);
+        }
       }
 
       const { data, error } = await query;
