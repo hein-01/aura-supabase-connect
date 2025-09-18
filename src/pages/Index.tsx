@@ -157,7 +157,7 @@ const Index = () => {
                     </div>
                   </div>
                   {/* Floating elements */}
-                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full animate-bounce"></div>
+                  <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-bounce"></div>
                   
                 </div>
               </div>
