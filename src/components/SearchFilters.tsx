@@ -52,12 +52,11 @@ export const SearchFilters = ({
           {/* Desktop layout */}
           <div className="hidden md:flex gap-2">
             <form onSubmit={handleSearchSubmit} className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search businesses..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 border-2 shadow-sm hover:shadow-md focus:shadow-lg focus:border-purple-500 focus-visible:ring-2 focus-visible:ring-purple-500/20 transition-all duration-200"
+                className="border-2 shadow-sm hover:shadow-md focus:shadow-lg focus:border-purple-500 focus-visible:ring-2 focus-visible:ring-purple-500/20 transition-all duration-200"
               />
             </form>
             
@@ -107,12 +106,11 @@ export const SearchFilters = ({
             {/* Search input with search button */}
             <div className="flex">
               <form onSubmit={handleSearchSubmit} className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search businesses..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10 border-2 shadow-sm hover:shadow-md focus:shadow-lg focus:border-purple-500 focus-visible:ring-2 focus-visible:ring-purple-500/20 transition-all duration-200 rounded-r-none border-r-0"
+                  className="border-2 shadow-sm hover:shadow-md focus:shadow-lg focus:border-purple-500 focus-visible:ring-2 focus-visible:ring-purple-500/20 transition-all duration-200 rounded-r-none border-r-0"
                 />
               </form>
               <Button 
