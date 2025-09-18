@@ -49,8 +49,8 @@ export const SearchFilters = ({
         </div>
         
         <div className="space-y-4">
-          {/* Search with Filters and Search buttons */}
-          <div className="flex gap-2">
+          {/* Desktop layout */}
+          <div className="hidden md:flex gap-2">
             <form onSubmit={handleSearchSubmit} className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -67,8 +67,8 @@ export const SearchFilters = ({
                 variant="outline"
                 className="border-2 shadow-md hover:shadow-lg transition-shadow duration-200"
               >
-                <MapPin className="h-4 w-4 md:mr-2" />
-                <span className="hidden md:inline">Locations</span>
+                <MapPin className="h-4 w-4 mr-2" />
+                Locations
               </Button>
             </LocationsModal>
             
@@ -87,8 +87,8 @@ export const SearchFilters = ({
                 variant="outline"
                 className="border-2 shadow-md hover:shadow-lg transition-shadow duration-200"
               >
-                <Filter className="h-4 w-4 md:mr-2" />
-                <span className="hidden md:inline">Filters</span>
+                <Filter className="h-4 w-4 mr-2" />
+                Filters
               </Button>
             </FiltersModal>
             
@@ -97,9 +97,64 @@ export const SearchFilters = ({
               onClick={() => handleSearchSubmit(new Event('submit') as any)}
               className="shadow-md hover:shadow-lg transition-shadow duration-200"
             >
-              <Search className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">Search</span>
+              <Search className="h-4 w-4 mr-2" />
+              Search
             </Button>
+          </div>
+
+          {/* Mobile layout */}
+          <div className="md:hidden space-y-3">
+            {/* Search input with search button */}
+            <div className="flex">
+              <form onSubmit={handleSearchSubmit} className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search businesses..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-10 border-2 shadow-sm hover:shadow-md focus:shadow-lg focus:border-purple-500 focus-visible:ring-2 focus-visible:ring-purple-500/20 transition-all duration-200 rounded-r-none border-r-0"
+                />
+              </form>
+              <Button 
+                type="button" 
+                onClick={() => handleSearchSubmit(new Event('submit') as any)}
+                className="shadow-md hover:shadow-lg transition-shadow duration-200 rounded-l-none"
+              >
+                <Search className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            {/* Location and Filter buttons */}
+            <div className="flex gap-1 justify-center">
+              <LocationsModal key={`locations-${resetVersion}`} onLocationChange={onLocationChange}>
+                <Button 
+                  type="button" 
+                  variant="outline"
+                  className="border-2 shadow-md hover:shadow-lg transition-shadow duration-200"
+                >
+                  <MapPin className="h-4 w-4" />
+                </Button>
+              </LocationsModal>
+              
+              <FiltersModal key={`filters-${resetVersion}`}
+                onSearchChange={onSearchChange}
+                onCategoryChange={onCategoryChange}
+                onLocationChange={onLocationChange}
+                onProductChange={onProductChange}
+                categories={categories}
+                initialSearchTerm={initialSearchTerm}
+                initialCategory={initialCategory}
+                initialProduct={"All Products"}
+              >
+                <Button 
+                  type="button" 
+                  variant="outline"
+                  className="border-2 shadow-md hover:shadow-lg transition-shadow duration-200"
+                >
+                  <Filter className="h-4 w-4" />
+                </Button>
+              </FiltersModal>
+            </div>
           </div>
           
           {/* Centered delivery and filter buttons */}
