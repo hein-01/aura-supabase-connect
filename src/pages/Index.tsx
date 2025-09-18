@@ -184,7 +184,7 @@ const Index = () => {
               </div>
               
               {/* CTA Buttons */}
-              <div className="flex flex-col gap-4 min-w-fit">
+              <div className="flex flex-col md:flex-row gap-4 min-w-fit">
                 <Button className="bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 text-white px-6 py-3 rounded-xl font-medium text-sm shadow-xl hover:shadow-2xl transition-all duration-300">
                   Find Shops
                 </Button>
