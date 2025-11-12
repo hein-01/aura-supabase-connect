@@ -68,6 +68,7 @@ export type Database = {
           created_at: string
           id: string
           payment_amount: number
+          payment_method: string | null
           receipt_url: string
           resource_id: string
           slot_id: string
@@ -80,6 +81,7 @@ export type Database = {
           created_at?: string
           id?: string
           payment_amount: number
+          payment_method?: string | null
           receipt_url: string
           resource_id: string
           slot_id: string
@@ -92,6 +94,7 @@ export type Database = {
           created_at?: string
           id?: string
           payment_amount?: number
+          payment_method?: string | null
           receipt_url?: string
           resource_id?: string
           slot_id?: string

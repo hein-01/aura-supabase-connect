@@ -27,7 +27,7 @@ interface SubmitReceiptModalProps {
   paymentMethods: PaymentMethodInfo[];
   amount: number;
   isSubmitting: boolean;
-  onSubmit: (file: File | null) => Promise<void>;
+  onSubmit: (file: File | null, paymentMethod: string | null) => Promise<void>;
 }
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -124,11 +124,12 @@ export function SubmitReceiptModal({
   };
 
   const handleSubmit = async () => {
+    const paymentMethodType = selectedMethod?.method_type || null;
     // For "Cash on Arrival", receipt is optional
     if (selectedMethod?.method_type.toLowerCase() === "cash on arrival") {
-      await onSubmit(receiptFile || null);
+      await onSubmit(receiptFile || null, paymentMethodType);
     } else if (receiptFile) {
-      await onSubmit(receiptFile);
+      await onSubmit(receiptFile, paymentMethodType);
     }
   };
 

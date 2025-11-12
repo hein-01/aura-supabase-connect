@@ -49,7 +49,8 @@ export async function submitBooking(
   slotId: string,
   userId: string,
   amount: number,
-  receiptFile: File | null
+  receiptFile: File | null,
+  paymentMethod: string | null = null
 ): Promise<SubmitBookingResult> {
   const { data: slot, error: slotError } = await supabase
     .from("slots")
@@ -94,6 +95,7 @@ export async function submitBooking(
       user_id: userId,
       payment_amount: slot.slot_price,
       receipt_url: receiptUrl || "Cash on Arrival - No receipt required",
+      payment_method: paymentMethod,
     })
     .select("id")
     .single();

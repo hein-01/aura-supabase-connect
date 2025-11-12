@@ -436,7 +436,7 @@ export default function ServiceAvailability(props: ServiceAvailabilityProps) {
     }
   };
 
-  const handleSubmitReceipt = async (file: File | null) => {
+  const handleSubmitReceipt = async (file: File | null, paymentMethod: string | null) => {
     if (!selectedSlot || !user) return;
     if (selectedSlot.slot_price === null || selectedSlot.slot_price === undefined) {
       toast({
@@ -518,7 +518,8 @@ export default function ServiceAvailability(props: ServiceAvailabilityProps) {
         selectedSlot.id,
         user.id,
         Number(selectedSlot.slot_price),
-        file
+        file,
+        paymentMethod
       );
 
       if (result.success === false) {

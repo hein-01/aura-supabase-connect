@@ -19,6 +19,7 @@ interface BookingData {
   status: string;
   payment_amount: number;
   receipt_url: string | null;
+  payment_method: string | null;
   created_at: string;
   user_id: string;
   customer_name?: string | null;
@@ -45,7 +46,7 @@ export default function RenterConfirmationScreen({
         setError(null);
         const { data: bookingData, error: bookingError } = await supabase
           .from("bookings")
-          .select("id, status, payment_amount, receipt_url, created_at, user_id")
+          .select("id, status, payment_amount, receipt_url, payment_method, created_at, user_id")
           .eq("id", bookingId)
           .maybeSingle();
 
@@ -172,7 +173,17 @@ export default function RenterConfirmationScreen({
             <Receipt className="h-4 w-4" />
             Payment Receipt
           </div>
-          {booking.receipt_url ? (
+          {booking.payment_method?.toLowerCase() === "cash on arrival" ? (
+            <div className="rounded-lg border bg-muted/30 p-6 text-center">
+              <div className="flex flex-col items-center gap-2">
+                <Receipt className="h-12 w-12 text-primary" />
+                <p className="text-lg font-semibold text-foreground">Cash on Arrival</p>
+                <p className="text-sm text-muted-foreground">
+                  Payment will be collected upon arrival
+                </p>
+              </div>
+            </div>
+          ) : booking.receipt_url ? (
             <div className="rounded-lg border overflow-hidden bg-muted/30">
               <img
                 src={booking.receipt_url}
