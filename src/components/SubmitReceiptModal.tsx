@@ -157,7 +157,7 @@ export function SubmitReceiptModal({
                   </h3>
                 </div>
                 <Badge variant="secondary" className="text-base font-medium px-3 py-1">
-                  {currencyFormatter.format(amount)} due
+                  {currencyFormatter.format(amount)}
                 </Badge>
               </div>
 
@@ -240,53 +240,55 @@ export function SubmitReceiptModal({
               </div>
             </section>
 
-            <section className="space-y-4">
-              <div className="space-y-1">
-                <h4 className="text-lg font-semibold text-foreground">Upload Screenshot of Payment Receipt</h4>
-                <p className="text-sm text-muted-foreground">
-                  Attach the screenshot once your transfer is complete. A quick preview will appear for confirmation.
-                </p>
-              </div>
-              <div className="grid gap-4 md:grid-cols-[1.5fr,1fr] items-start">
-                <Label
-                  htmlFor="receipt-upload"
-                  className="flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-xl py-10 px-6 text-center cursor-pointer hover:border-primary transition"
-                >
-                  <Upload className="h-8 w-8 text-primary" />
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">Select receipt image</p>
-                    <p className="text-xs text-muted-foreground">PNG, JPG, or JPEG (max 1MB)</p>
-                  </div>
-                  <Input id="receipt-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
-                </Label>
+            {selectedMethod?.method_type.toLowerCase() !== "cash on arrival" && (
+              <section className="space-y-4">
+                <div className="space-y-1">
+                  <h4 className="text-lg font-semibold text-foreground">Upload Screenshot of Payment Receipt</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Attach the screenshot once your transfer is complete. A quick preview will appear for confirmation.
+                  </p>
+                </div>
+                <div className="grid gap-4 md:grid-cols-[1.5fr,1fr] items-start">
+                  <Label
+                    htmlFor="receipt-upload"
+                    className="flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-xl py-10 px-6 text-center cursor-pointer hover:border-primary transition"
+                  >
+                    <Upload className="h-8 w-8 text-primary" />
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">Select receipt image</p>
+                      <p className="text-xs text-muted-foreground">PNG, JPG, or JPEG (max 1MB)</p>
+                    </div>
+                    <Input id="receipt-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                  </Label>
 
-                {previewUrl ? (
-                  <div className="relative w-full overflow-hidden rounded-xl border bg-muted/20">
-                    <img src={previewUrl} alt="Payment receipt preview" className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      className="absolute top-2 right-2 inline-flex items-center justify-center rounded-full bg-background/80 p-2 text-muted-foreground shadow"
-                      onClick={() => {
-                        setReceiptFile(null);
-                        setPreviewUrl((prev) => {
-                          if (prev) URL.revokeObjectURL(prev);
-                          return null;
-                        });
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                      <span className="sr-only">Remove receipt</span>
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex h-full min-h-[160px] items-center justify-center rounded-xl border border-dashed border-muted-foreground/40 bg-muted/10">
-                    <p className="text-sm text-muted-foreground text-center px-6">
-                      Once you choose an image, a preview will appear here for double-checking.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </section>
+                  {previewUrl ? (
+                    <div className="relative w-full overflow-hidden rounded-xl border bg-muted/20">
+                      <img src={previewUrl} alt="Payment receipt preview" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        className="absolute top-2 right-2 inline-flex items-center justify-center rounded-full bg-background/80 p-2 text-muted-foreground shadow"
+                        onClick={() => {
+                          setReceiptFile(null);
+                          setPreviewUrl((prev) => {
+                            if (prev) URL.revokeObjectURL(prev);
+                            return null;
+                          });
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                        <span className="sr-only">Remove receipt</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex h-full min-h-[160px] items-center justify-center rounded-xl border border-dashed border-muted-foreground/40 bg-muted/10">
+                      <p className="text-sm text-muted-foreground text-center px-6">
+                        Once you choose an image, a preview will appear here for double-checking.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </section>
+            )}
           </div>
         </ScrollArea>
 
