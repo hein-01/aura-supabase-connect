@@ -721,15 +721,15 @@ export default function UserDashboard() {
               </div>
             </div>
 
-            {/* Pending Bookings Section */}
+            {/* My Reservations Section */}
             <div className="animate-slide-up">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-primary" />
-                Pending Bookings
+                My Reservations
               </h3>
               {loadingPendingBookings ? (
                 <LoadingSpinner />
-              ) : pendingBookings.length > 0 ? (
+              ) : pendingBookings.filter(booking => booking.business_resources?.businesses?.owner_id !== user?.id).length > 0 ? (
                 <>
                   {/* Desktop Table View */}
                   <Card className="hidden md:block">
@@ -748,14 +748,13 @@ export default function UserDashboard() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {pendingBookings.map((booking) => {
+                          {pendingBookings.filter(booking => booking.business_resources?.businesses?.owner_id !== user?.id).map((booking) => {
                             const createdAt = new Date(booking.created_at);
                             const confirmationWindowEnd = addHours(createdAt, 2);
                             const now = new Date();
                             const timeRemaining = confirmationWindowEnd > now 
                               ? `${Math.ceil((confirmationWindowEnd.getTime() - now.getTime()) / (1000 * 60))} min`
                               : 'Expired';
-                            const isOwner = booking.business_resources?.businesses?.owner_id === user?.id;
                             
                             const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                             const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
@@ -765,9 +764,6 @@ export default function UserDashboard() {
                               <TableRow key={booking.id}>
                                 <TableCell className="font-medium">
                                   {booking.business_resources?.name || 'N/A'}
-                                  {isOwner && (
-                                    <Badge variant="outline" className="ml-2">Owner</Badge>
-                                  )}
                                 </TableCell>
                                 <TableCell>
                                   {slotStartTime ? (
@@ -807,19 +803,6 @@ export default function UserDashboard() {
                                 </TableCell>
                                 <TableCell>
                                   <div className="flex flex-col gap-2">
-                                    {isOwner && (
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => {
-                                          setSelectedBookingId(booking.id);
-                                          setConfirmationDialogOpen(true);
-                                        }}
-                                      >
-                                        <Eye className="h-4 w-4 mr-1" />
-                                        Review
-                                      </Button>
-                                    )}
                                     {booking.service_contact_phone && (
                                       <Button
                                         size="sm"
@@ -841,14 +824,13 @@ export default function UserDashboard() {
 
                   {/* Mobile Card View */}
                   <div className="md:hidden space-y-4">
-                    {pendingBookings.map((booking) => {
+                    {pendingBookings.filter(booking => booking.business_resources?.businesses?.owner_id !== user?.id).map((booking) => {
                       const createdAt = new Date(booking.created_at);
                       const confirmationWindowEnd = addHours(createdAt, 2);
                       const now = new Date();
                       const timeRemaining = confirmationWindowEnd > now 
                         ? `${Math.ceil((confirmationWindowEnd.getTime() - now.getTime()) / (1000 * 60))} min`
                         : 'Expired';
-                      const isOwner = booking.business_resources?.businesses?.owner_id === user?.id;
                       
                       const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                       const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
@@ -862,9 +844,6 @@ export default function UserDashboard() {
                                 <div className="font-medium text-sm">Service</div>
                                 <div className="font-semibold">
                                   {booking.business_resources?.name || 'N/A'}
-                                  {isOwner && (
-                                    <Badge variant="outline" className="ml-2">Owner</Badge>
-                                  )}
                                 </div>
                               </div>
                               <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded text-xs font-medium">
@@ -921,20 +900,6 @@ export default function UserDashboard() {
                             </div>
 
                             <div className="flex flex-col gap-2 pt-2">
-                              {isOwner && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => {
-                                    setSelectedBookingId(booking.id);
-                                    setConfirmationDialogOpen(true);
-                                  }}
-                                  className="w-full"
-                                >
-                                  <Eye className="h-4 w-4 mr-1" />
-                                  Review
-                                </Button>
-                              )}
                               {booking.service_contact_phone && (
                                 <Button
                                   size="sm"
@@ -956,7 +921,237 @@ export default function UserDashboard() {
                 <Card>
                   <CardContent className="pt-6">
                     <p className="text-muted-foreground text-center py-8">
-                      No pending bookings at the moment.
+                      No pending reservations at the moment.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
+            {/* My Services & Bookings Section */}
+            <div className="animate-slide-up">
+              <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-primary" />
+                My Services & Bookings
+              </h3>
+              {loadingPendingBookings ? (
+                <LoadingSpinner />
+              ) : pendingBookings.filter(booking => booking.business_resources?.businesses?.owner_id === user?.id).length > 0 ? (
+                <>
+                  {/* Desktop Table View */}
+                  <Card className="hidden md:block">
+                    <CardContent className="p-0">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Service</TableHead>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Time & Place</TableHead>
+                            <TableHead>Amount</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Submitted</TableHead>
+                            <TableHead>Time Remaining</TableHead>
+                            <TableHead>Actions</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {pendingBookings.filter(booking => booking.business_resources?.businesses?.owner_id === user?.id).map((booking) => {
+                            const createdAt = new Date(booking.created_at);
+                            const confirmationWindowEnd = addHours(createdAt, 2);
+                            const now = new Date();
+                            const timeRemaining = confirmationWindowEnd > now 
+                              ? `${Math.ceil((confirmationWindowEnd.getTime() - now.getTime()) / (1000 * 60))} min`
+                              : 'Expired';
+                            
+                            const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
+                            const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
+                            const fieldName = booking.business_resources?.name || 'N/A';
+                            
+                            return (
+                              <TableRow key={booking.id}>
+                                <TableCell className="font-medium">
+                                  {booking.business_resources?.name || 'N/A'}
+                                </TableCell>
+                                <TableCell>
+                                  {slotStartTime ? (
+                                    <div className="font-medium">
+                                      {format(slotStartTime, "EEE, MMM dd, yyyy")}
+                                    </div>
+                                  ) : (
+                                    <span className="text-muted-foreground">-</span>
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {slotStartTime && slotEndTime ? (
+                                    <div className="text-sm">
+                                      {format(slotStartTime, "h:mm a")} - {format(slotEndTime, "h:mm a")} [{fieldName}]
+                                    </div>
+                                  ) : (
+                                    <span className="text-muted-foreground">-</span>
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {new Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "MMK",
+                                    maximumFractionDigits: 0,
+                                  }).format(Number(booking.payment_amount || 0))}
+                                </TableCell>
+                                <TableCell>
+                                  <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded text-xs font-medium">
+                                    {booking.status}
+                                  </span>
+                                </TableCell>
+                                <TableCell className="text-sm text-muted-foreground">
+                                  {format(createdAt, "dd MMM yyyy, h:mm a")}
+                                </TableCell>
+                                <TableCell className={timeRemaining === 'Expired' ? 'text-destructive' : 'text-muted-foreground'}>
+                                  {timeRemaining}
+                                </TableCell>
+                                <TableCell>
+                                  <div className="flex flex-col gap-2">
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => {
+                                        setSelectedBookingId(booking.id);
+                                        setConfirmationDialogOpen(true);
+                                      }}
+                                    >
+                                      <Eye className="h-4 w-4 mr-1" />
+                                      Review
+                                    </Button>
+                                    {booking.service_contact_phone && (
+                                      <Button
+                                        size="sm"
+                                        variant="default"
+                                        onClick={() => window.open(`tel:${booking.service_contact_phone}`, '_self')}
+                                      >
+                                        Call Provider
+                                      </Button>
+                                    )}
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+
+                  {/* Mobile Card View */}
+                  <div className="md:hidden space-y-4">
+                    {pendingBookings.filter(booking => booking.business_resources?.businesses?.owner_id === user?.id).map((booking) => {
+                      const createdAt = new Date(booking.created_at);
+                      const confirmationWindowEnd = addHours(createdAt, 2);
+                      const now = new Date();
+                      const timeRemaining = confirmationWindowEnd > now 
+                        ? `${Math.ceil((confirmationWindowEnd.getTime() - now.getTime()) / (1000 * 60))} min`
+                        : 'Expired';
+                      
+                      const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
+                      const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
+                      const fieldName = booking.business_resources?.name || 'N/A';
+                      
+                      return (
+                        <Card key={booking.id}>
+                          <CardContent className="p-4 space-y-3">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <div className="font-medium text-sm">Service</div>
+                                <div className="font-semibold">
+                                  {booking.business_resources?.name || 'N/A'}
+                                </div>
+                              </div>
+                              <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded text-xs font-medium">
+                                {booking.status}
+                              </span>
+                            </div>
+
+                            <div>
+                              <div className="font-medium text-sm text-muted-foreground">Date</div>
+                              {slotStartTime ? (
+                                <div className="font-medium">
+                                  {format(slotStartTime, "EEE, MMM dd, yyyy")}
+                                </div>
+                              ) : (
+                                <span className="text-muted-foreground">-</span>
+                              )}
+                            </div>
+
+                            <div>
+                              <div className="font-medium text-sm text-muted-foreground">Time & Place</div>
+                              {slotStartTime && slotEndTime ? (
+                                <div className="text-sm">
+                                  {format(slotStartTime, "h:mm a")} - {format(slotEndTime, "h:mm a")} [{fieldName}]
+                                </div>
+                              ) : (
+                                <span className="text-muted-foreground">-</span>
+                              )}
+                            </div>
+
+                            <div>
+                              <div className="font-medium text-sm text-muted-foreground">Amount</div>
+                              <div>
+                                {new Intl.NumberFormat("en-US", {
+                                  style: "currency",
+                                  currency: "MMK",
+                                  maximumFractionDigits: 0,
+                                }).format(Number(booking.payment_amount || 0))}
+                              </div>
+                            </div>
+
+                            <div className="flex justify-between">
+                              <div>
+                                <div className="font-medium text-sm text-muted-foreground">Submitted</div>
+                                <div className="text-sm">
+                                  {format(createdAt, "dd MMM yyyy, h:mm a")}
+                                </div>
+                              </div>
+                              <div>
+                                <div className="font-medium text-sm text-muted-foreground">Time Remaining</div>
+                                <div className={`text-sm ${timeRemaining === 'Expired' ? 'text-destructive' : ''}`}>
+                                  {timeRemaining}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2 pt-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  setSelectedBookingId(booking.id);
+                                  setConfirmationDialogOpen(true);
+                                }}
+                                className="w-full"
+                              >
+                                <Eye className="h-4 w-4 mr-1" />
+                                Review
+                              </Button>
+                              {booking.service_contact_phone && (
+                                <Button
+                                  size="sm"
+                                  variant="default"
+                                  onClick={() => window.open(`tel:${booking.service_contact_phone}`, '_self')}
+                                  className="w-full"
+                                >
+                                  Call Provider
+                                </Button>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : (
+                <Card>
+                  <CardContent className="pt-6">
+                    <p className="text-muted-foreground text-center py-8">
+                      No pending bookings for your services at the moment.
                     </p>
                   </CardContent>
                 </Card>
